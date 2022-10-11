@@ -12,6 +12,9 @@ public class GraphMatrix {
         adj = new boolean[NumVert][NumVert];
     }
 
+    public boolean[][] getAdj(){
+        return adj;
+    }
     public void addEdge(int i, int j) {
 //        System.out.println("yep");
         adj[i][j] = adj[j][i] = true;

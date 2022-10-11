@@ -27,24 +27,24 @@ public class txtReader{
             if(str.equals("VERTICES") && scanner.next().equals("=")){
                 vertNum = Integer.parseInt(scanner.next()) ;
 
-                System.out.println("size " + vertNum);
+                //System.out.println("size " + vertNum);
 
                 graph = new GraphMatrix(vertNum);
             }
             else if(str.equals("EDGES") && scanner.next().equals("=")) {
 
                 int numOfEdges = Integer.parseInt(scanner.next());
-                System.out.println("Num of Edges " + numOfEdges);
-                System.out.println(graph.getNumVert() + " numVert");
+//                System.out.println("Num of Edges " + numOfEdges);
+//                System.out.println(graph.getNumVert() + " numVert");
             }
             else{
                     int firstVert = Integer.parseInt(scanner.next()) - 1;
                     int secondVert = Integer.parseInt(scanner.next()) - 1;
 
-                    System.out.println("first " + firstVert + " second " + secondVert);
+                    //System.out.println("first " + firstVert + " second " + secondVert);
 
                     graph.addEdge(firstVert, secondVert);
-                    System.out.println(graph.hasEdge(firstVert, secondVert));
+                    //System.out.println(graph.hasEdge(firstVert, secondVert));
             }
         }
         return graph;
