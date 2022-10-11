@@ -1,0 +1,10 @@
+algorithms i want to:
+
+greedy
+backtracking/brute-force
+tabu coloring
+simulating annealing
+
+First: create a graph
+Second: implement algorithms, txt graph reader for DIMACS
+Third: test performance
