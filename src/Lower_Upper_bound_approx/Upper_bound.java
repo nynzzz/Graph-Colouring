@@ -6,14 +6,14 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt;
+import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt_Matrix;
 
 public class Upper_bound {
 
     public static void main(String[] args) throws FileNotFoundException {
 
         String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph01_2022.txt";
-        GraphMatrix g = createGraphFromTxt(path);
+        GraphMatrix g = createGraphFromTxt_Matrix(path);
 
         System.out.println("Max Degree approximation " + upperBound_maxDegree(g));
         System.out.println("Vertex Cover  approximation " + upperBound_vertCov(g));

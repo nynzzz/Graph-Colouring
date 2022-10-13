@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 import static txtReader_DIMACS.txtReader_DIMACS.createGraphFromTxt_DIMACS;
+import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt_Matrix;
 
 public class TabuCol {
 
@@ -62,7 +63,7 @@ public class TabuCol {
             int node = 0;
             for (int i = 0; i < reps; i++) {
                 //choose a node to move
-                //if no candidates -> return solution //TODO
+                //if no candidates then return solution //TODO
                 if (moveCandidates.isEmpty()) {
                     System.out.println("coloring found, no candidates to move :");
                     return solution;
@@ -99,7 +100,7 @@ public class TabuCol {
                 }
 //                System.out.println("NEW conf " + newConflicts);
 //                System.out.println("OLD conf " + conflictCount);
-
+                //TODO Something wrong with heuristic
                 //found an improved solution?
                 if (newConflicts < conflictCount) {
                     //System.out.println("3");
@@ -164,8 +165,8 @@ public class TabuCol {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String txtPath = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader/dsjc125.1_5.txt";
-        GraphMatrix g = createGraphFromTxt_DIMACS(txtPath);
+        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph20_2022.txt";
+        GraphMatrix g = createGraphFromTxt_Matrix(path);
 
 //        GraphMatrix g = new GraphMatrix(5);
 //        g.addEdge(0, 1);
@@ -175,6 +176,6 @@ public class TabuCol {
 //        g.addEdge(2, 3);
 //        g.addEdge(3, 4);
 //
-        System.out.println(tabuCol(g, 3));
+        System.out.println(tabuCol(g, 10));
     }
 }

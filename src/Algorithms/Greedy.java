@@ -1,10 +1,14 @@
 package Algorithms;
 
 import Graph_Implementation.GraphList;
+import Graph_Implementation.GraphMatrix;
 
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.stream.IntStream;
+
+import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt_List;
+import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt_Matrix;
 
 public class Greedy {
     public static int greedy (GraphList g){
@@ -44,31 +48,28 @@ public class Greedy {
             Arrays.fill(avail, true);
         }
 
-//        //print result
-//        for(int u = 0; u < v; u++){
-//            System.out.println("Vertex " + u + "-------> Color " + result[u]);
-//        }
-
         //chromatic number
         int k = 0;
         Arrays.sort(result);
         int maxColorNum = result[result.length - 1];
         k = maxColorNum + 1;
 
-        System.out.println("chromatic number = " + k);
+//        System.out.println("chromatic number = " + k);
         return k;
     }
 
-    public static void main(String[] args) {
-        GraphList g = new GraphList(5);
-        g.addEdge(0,1);
-        g.addEdge(0,2);
-        g.addEdge(1,2);
-        g.addEdge(1,3);
-        g.addEdge(2,3);
-        g.addEdge(3,4);
+    public static void main(String[] args) throws FileNotFoundException {
+//        GraphList g = new GraphList(5);
+//        g.addEdge(0,1);
+//        g.addEdge(0,2);
+//        g.addEdge(1,2);
+//        g.addEdge(1,3);
+//        g.addEdge(2,3);
+//        g.addEdge(3,4);
 
-        g.printGraph();
+        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph01_2022.txt";
+        GraphList g = createGraphFromTxt_List(path);
+
         greedy(g);
     }
 }
