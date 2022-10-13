@@ -11,13 +11,13 @@ import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt_Matrix;
 
 public class Lower_bound {
     public static void main(String[] args) throws FileNotFoundException {
-        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph03_2022.txt";
-//        GraphMatrix g = createGraphFromTxt_Matrix(path);
+        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph20_2022.txt";
+        GraphMatrix g = createGraphFromTxt_Matrix(path);
 
-        GraphMatrix g = new GraphMatrix(3);
-        g.addEdge(0,1);
-        g.addEdge(0,2);
-        g.addEdge(1,2);
+//        GraphMatrix g = new GraphMatrix(3);
+//        g.addEdge(0,1);
+//        g.addEdge(0,2);
+//        g.addEdge(1,2);
 
 //        g.addEdge(0,4);
 //        g.addEdge(1,2);
@@ -45,15 +45,17 @@ public class Lower_bound {
         for (int i = 0; i < adjCopy.length; i++) {
             for (int j = 0; j < adjCopy[0].length; j++) {
                 if (adjCopy[i][j]){
-                    System.out.println("here");
+//                    System.out.println("here");
                     adjCopy_int[i][j] = 1;
                 }
-                adjCopy_int[i][j] = 0;
+                else {
+                    adjCopy_int[i][j] = 0;
+                }
             }
         }
         for (int i = 0; i < adjCopy_int.length; i++) {
             for (int j = 0; j < adjCopy_int[0].length; j++) {
-                System.out.println("old " + adjCopy_int[i][j]);
+//                System.out.println("old " + adjCopy_int[i][j]);
             }
         }
 
@@ -65,14 +67,14 @@ public class Lower_bound {
 
         colourArray[v] = 1;
 
-        LinkedList<Integer> q = new LinkedList<Integer>();
+        LinkedList<Integer> q = new LinkedList<>();
         q.add(v);
 
         while (!q.isEmpty()) {
 
             for (int i = 0; i < adjCopy_int.length; i++) {
                 for (int j = 0; j < adjCopy_int[0].length; j++) {
-                    System.out.println(adjCopy_int[i][j]);
+//                    System.out.println(adjCopy_int[i][j]);
                 }
             }
 
@@ -80,10 +82,10 @@ public class Lower_bound {
             q.pop();
 
             for (int notCol = 0; notCol < numVert; notCol++) {
-                System.out.println("vertex " + vertex + " notCol " + notCol);
-                System.out.println("adjCopy_int[vertex][notCol] " + adjCopy_int[vertex][notCol]);
-                System.out.println("adjCopy[vertex][notCol] " + adjCopy[vertex][notCol]);
-                System.out.println("-------------------------");
+//                System.out.println("vertex " + vertex + " notCol " + notCol);
+//                System.out.println("adjCopy_int[vertex][notCol] " + adjCopy_int[vertex][notCol]);
+//                System.out.println("adjCopy[vertex][notCol] " + adjCopy[vertex][notCol]);
+//                System.out.println("-------------------------");
                 if (adjCopy_int[vertex][notCol] == 1 && colourArray[notCol] == -1) {
                     colourArray[notCol] = 1 - colourArray[v];
                     q.push(notCol);
@@ -95,6 +97,8 @@ public class Lower_bound {
         return false;
     }
 
+
+    //TODO fix next phase
     //lower bound approximation based on the size of the largest MAXIMAL clique
     //uses Bron-Kerbosch algorithm (originally returns all maximal matchings)
 
