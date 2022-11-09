@@ -29,10 +29,13 @@ public class RandomOrder {
 //        boolean[] alreadyVisited = new boolean[graph.getNumVert()];
         graph.createVertexGraph();
         ArrayList<Vertex> vertexArrayList = (ArrayList<Vertex>) graph.getVertexGraph();
-        ArrayList<Vertex> randomSequence = new ArrayList<>();
+        int sizeOfSequence = vertexArrayList.size();
+        //System.out.println("size " + vertexArrayList.size());
+        ArrayList<Vertex> randomSequence = new ArrayList<Vertex>();
 
-        while(vertexArrayList.size() != randomSequence.size()){
 
+        while(randomSequence.size() != sizeOfSequence){
+            System.out.println("here");
             int IDofVertexToAdd = getRandomInteger(vertexArrayList.size(), 0);
             randomSequence.add(vertexArrayList.get(IDofVertexToAdd));
             vertexArrayList.remove(IDofVertexToAdd);
