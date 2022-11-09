@@ -7,9 +7,22 @@ public class GraphMatrix {
     private int NumVert;
     private boolean[][] adj;
 
+    private List<Vertex> vertexGraph;
+
+    private int maxColour;
+
     public GraphMatrix(int NumVert) {
+        this.maxColour = -1;
         this.NumVert = NumVert;
         adj = new boolean[NumVert][NumVert];
+        vertexGraph = new ArrayList<Vertex>();
+    }
+
+    public int getMaxColour(){
+        return maxColour;
+    }
+    public void setMaxColour(int color){
+        this.maxColour = color;
     }
 
     public boolean[][] getAdj(){
@@ -49,4 +62,17 @@ public class GraphMatrix {
     public int getNumVert(){
         return NumVert;
     }
+
+    //create a vertex graph
+    public void createVertexGraph(){
+        for (int i = 0; i < this.getNumVert(); i++) {
+            Vertex vertexi = new Vertex(this, i);
+            this.vertexGraph.add(vertexi);
+        }
+    }
+
+    public List<Vertex> getVertexGraph(){
+        return this.vertexGraph;
+    }
+
 }

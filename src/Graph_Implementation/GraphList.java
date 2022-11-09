@@ -7,11 +7,21 @@ public class GraphList {
     private int NumVert;
     private List<Integer>[] adj;
 
+    private int maxColour;
+
     public GraphList(int NumVert) {
+        this.maxColour = 0;
         this.NumVert = NumVert;
         adj = (List<Integer>[]) new List[NumVert];
         for (int i = 0; i < NumVert; i++)
             adj[i] = new ArrayList<Integer>();
+    }
+
+    public int getMaxColour(){
+        return maxColour;
+    }
+    public void setMaxColour(int color){
+        this.maxColour = color;
     }
 
     public int getNumVert(){
