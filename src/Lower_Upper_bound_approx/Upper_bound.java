@@ -20,7 +20,7 @@ public class Upper_bound {
     }
 
     //upper bound based on maximum degree of the graph
-    public static int upperBound_maxDegree(GraphMatrix g){
+    public static int upperBound_maxDegree(GraphMatrix g) {
 
         int vertNum = g.getNumVert();
         int[] degree = new int[vertNum];
@@ -38,7 +38,7 @@ public class Upper_bound {
     }
 
     //upper bound based on the size of vertex cover
-    public static int upperBound_vertCov(GraphMatrix g){
+    public static int upperBound_vertCov(GraphMatrix g) {
 
         ArrayList<Integer> vc = new ArrayList<>();
         boolean[][] adjCopy = g.getAdj();
@@ -46,18 +46,18 @@ public class Upper_bound {
         int col = adjCopy[0].length;
 
         //while adj matrix is NOT empty do
-        while(!adjMatrixIsEmpty(adjCopy)){
+        while (!adjMatrixIsEmpty(adjCopy)) {
 
             int[] arbitraryEdge = chooseRandomEdgeFrom(adjCopy);
             int vertex1 = arbitraryEdge[0];
             int vertex2 = arbitraryEdge[1];
 
-            if(!vc.contains(vertex1)){
+            if (!vc.contains(vertex1)) {
                 vc.add(vertex1);
             }
-           if(!vc.contains(vertex2)){
-               vc.add(vertex2);
-           }
+            if (!vc.contains(vertex2)) {
+                vc.add(vertex2);
+            }
 
             for (int i = 0; i < rows; i++) {
                 adjCopy[i][vertex1] = false;
@@ -73,14 +73,14 @@ public class Upper_bound {
 
     /////////helper methods//////////
 
-    public static boolean adjMatrixIsEmpty(boolean[][] arr){
+    public static boolean adjMatrixIsEmpty(boolean[][] arr) {
 
         int rows = arr.length;
         int col = arr[0].length;
 
-        for(int i =0; i<rows; i++){
+        for (int i = 0; i < rows; i++) {
             for (int j = 0; j < col; j++) {
-                if(arr[i][j] == true){
+                if (arr[i][j] == true) {
                     return false;
                 }
             }
@@ -88,11 +88,11 @@ public class Upper_bound {
         return true;
     }
 
-    public static int getRandomInteger(int maximum, int minimum){
-        return ((int) (Math.random()*(maximum - minimum))) + minimum;
+    public static int getRandomInteger(int maximum, int minimum) {
+        return ((int) (Math.random() * (maximum - minimum))) + minimum;
     }
 
-    public static int[] chooseRandomEdgeFrom(boolean[][] arr){
+    public static int[] chooseRandomEdgeFrom(boolean[][] arr) {
 
         int rows = arr.length;
         int col = arr[0].length;

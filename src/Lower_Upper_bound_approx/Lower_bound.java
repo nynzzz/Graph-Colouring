@@ -59,7 +59,6 @@ public class Lower_bound {
             }
         }
 
-
         int numVert = g.getNumVert();
         int colourArray[] = new int[numVert];
         for (int i = 0; i < numVert; i++)
@@ -156,10 +155,7 @@ public class Lower_bound {
                 maximalCliques.add(r);
             }
         }
-
         ArrayList<Integer> p1 = new ArrayList<Integer>(p);
-
-
 
         while(!p.isEmpty()){
 //            int v = p.get(vertex);

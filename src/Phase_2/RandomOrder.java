@@ -17,28 +17,25 @@ public class RandomOrder {
         g.addEdge(2, 3);
         g.addEdge(3, 4);
 
-        ArrayList<Vertex> sequence =  RandomVertexSequence(g);
-
-        for (int i = 0; i < sequence.size(); i++) {
-            System.out.println(sequence.get(i).getVertexNum());
-        }
+//        ArrayList<Vertex> sequence =  RandomVertexSequence(g);
+//
+//        for (int i = 0; i < sequence.size(); i++) {
+//            System.out.println(sequence.get(i).getVertexNum());
+//        }
     }
 
 
-    public static ArrayList<Vertex> RandomVertexSequence(GraphMatrix graph){
-//        boolean[] alreadyVisited = new boolean[graph.getNumVert()];
-        graph.createVertexGraph();
-        ArrayList<Vertex> vertexArrayList = (ArrayList<Vertex>) graph.getVertexGraph();
-        int sizeOfSequence = vertexArrayList.size();
-        //System.out.println("size " + vertexArrayList.size());
+    public static ArrayList<Vertex> RandomVertexSequence(ArrayList<Vertex> vertexArrayList ){
+        ArrayList<Vertex> arr_copy = new ArrayList<>(vertexArrayList);
         ArrayList<Vertex> randomSequence = new ArrayList<Vertex>();
 
-
-        while(randomSequence.size() != sizeOfSequence){
-            System.out.println("here");
-            int IDofVertexToAdd = getRandomInteger(vertexArrayList.size(), 0);
-            randomSequence.add(vertexArrayList.get(IDofVertexToAdd));
-            vertexArrayList.remove(IDofVertexToAdd);
+        while(randomSequence.size() != vertexArrayList.size()){
+            //System.out.println("here");
+            Vertex toCheck = arr_copy.get(getRandomInteger(arr_copy.size(),0));
+            if(!randomSequence.contains(toCheck)) {
+                randomSequence.add(toCheck);
+            }
+            arr_copy.remove(toCheck);
         }
         return randomSequence;
     }

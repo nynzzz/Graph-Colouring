@@ -21,7 +21,7 @@ public class Backtrack {
         }
         //printColors(colors);
         Arrays.sort(colors);
-        System.out.println("colors " + Arrays.toString(colors));
+//        System.out.println("colors " + Arrays.toString(colors));
         System.out.println("chromatic number = " + colors[colors.length-1] );
         return colors[colors.length-1];
     }
@@ -74,7 +74,7 @@ public class Backtrack {
 //        g.addEdge(2, 3);
 //        g.addEdge(3, 4);
 
-        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph20_2022.txt";
+        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph07_2022.txt";
         GraphMatrix g = createGraphFromTxt_Matrix(path);
        // g.printGraph();
         backTrack(g);
