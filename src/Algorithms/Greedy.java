@@ -67,9 +67,9 @@ public class Greedy {
 //        g.addEdge(2,3);
 //        g.addEdge(3,4);
 
-        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph01_2022.txt";
+        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/Tournament_TestSuite/phase3_2022_graph20.txt";
         GraphList g = createGraphFromTxt_List(path);
 
-        greedy(g);
+        System.out.println(greedy(g));
     }
 }

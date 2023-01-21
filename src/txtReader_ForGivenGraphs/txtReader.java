@@ -37,6 +37,7 @@ public class txtReader{
                 int numOfEdges = Integer.parseInt(scanner.next());
 //                System.out.println("Num of Edges " + numOfEdges);
 //                System.out.println(graph.getNumVert() + " numVert");
+                graph.setNumEdg(numOfEdges);
             }
             else{
                     int firstVert = Integer.parseInt(str) - 1;

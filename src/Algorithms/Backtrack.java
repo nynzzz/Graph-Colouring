@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
+import static txtReader_DIMACS.txtReader_DIMACS.createGraphFromTxt_DIMACS;
 import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt_Matrix;
 
 public class Backtrack {
@@ -22,7 +23,7 @@ public class Backtrack {
         //printColors(colors);
         Arrays.sort(colors);
 //        System.out.println("colors " + Arrays.toString(colors));
-        System.out.println("chromatic number = " + colors[colors.length-1] );
+//        System.out.println("chromatic number: " + colors[colors.length-1] );
         return colors[colors.length-1];
     }
 
@@ -74,9 +75,9 @@ public class Backtrack {
 //        g.addEdge(2, 3);
 //        g.addEdge(3, 4);
 
-        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph07_2022.txt";
+        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/Tournament_TestSuite/phase3_2022_graph20.txt";
         GraphMatrix g = createGraphFromTxt_Matrix(path);
-       // g.printGraph();
-        backTrack(g);
+//        GraphMatrix g = createGraphFromTxt_DIMACS(path);
+        System.out.println(backTrack(g));
     }
 }

@@ -4,178 +4,264 @@ import Graph_Implementation.GraphMatrix;
 
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
+import static Algorithms.Backtrack.backTrack;
 import static txtReader_DIMACS.txtReader_DIMACS.createGraphFromTxt_DIMACS;
 import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt_Matrix;
 
 public class TabuCol {
+    public static boolean TabuCol_kGCP(GraphMatrix graph, int maxIter, int k){
+        // Number of vertices
+        int numVert = graph.getNumVert();
+        // The current coloring of the graph
+        int[] coloring = new int[numVert];
 
-    public static HashMap<Integer, Integer> tabuCol(GraphMatrix graph, int numOfColors) {
+        // The tabu list, which is a list of vertices that are "tabu" (cannot be colored). Pairs of [vertex, color]
+        Queue<Move> TabuQueue = new LinkedBlockingQueue<>();
 
-        int graphLen = graph.getNumVert();
-
-        int tabuSize = 10;
-        int reps = 150;         //number of neigh generated
-        int maxIter = 1000000;
-
-        int iterations = 0;
-
-        ArrayList<Integer> colors = new ArrayList<>();
-        for (int i = 0; i < numOfColors; i++) {
-            colors.add(i);
+        // Initialize the coloring. Initially random
+        for (int i = 0; i < numVert; i++) {
+            int vertex = i;
+            int color = getRandomInteger(k-1,0);
+            Move initialMove = new Move(vertex, color);
+            TabuQueue.add(initialMove);
+            coloring[vertex] = color;
         }
+        // The current iteration of the algorithm
+        int iteration = 0;
+        // Search space. Neighbourhood size - colourings which can be reached by one-step move
+        int spaceSize = ((k-1)*numVert)*2;
 
-        Queue<int[]> tabu = new LinkedList<>();
+        // Continue until the maximum number of iterations is reached or the coloring is valid
+        while (!isLegal(graph, coloring)) {
 
-        //initial random solution
-        HashMap<Integer, Integer> solution = new HashMap<>();
-        for (int i = 0; i < graphLen; i++) {
-            int colorToAdd = getRandomInteger(colors.size(), 0);
-            solution.put(i, colorToAdd);
-        }
-
-        //Aspiration level A(z), represented by a mapping: f(s) -> best f(s') seen so far
-        // TODO change later !!!
-        HashMap<Integer, Integer> aspirationLevel = new HashMap<>();
-
-
-        int conflictCount = 0;
-
-        while (iterations < maxIter) {
-            conflictCount = 0;
-            ArrayList<Integer> moveCandidates = new ArrayList<>();
-
-            for (int i = 0; i < graphLen; i++) {
-                for (int j = i + 1; j < graphLen; j++) {
-                    if (graph.hasEdge(i, j)) {
-                        if (solution.get(i).equals(solution.get(j))) {
-                            moveCandidates.add(i);
-                            moveCandidates.add(j);
-                            conflictCount = conflictCount + 1;
-                        }
-                    }
-                }
+            if(iteration >= maxIter){
+//                System.out.println("Out of max iterations");
+                return false;
             }
-            if (conflictCount == 0)
+
+//            System.out.println("-----------------------");
+//            printTabu(TabuQueue);
+//            System.out.println("itr: " + iteration);
+//            System.out.println("Tabu Size: " + TabuQueue.size());
+
+
+            // Current coloring evalFun value
+            int currentEval = evalFun(graph, coloring);
+//            System.out.println("currentEval: " + currentEval);
+//            System.out.println("-----------------------");
+            if(currentEval == 0){
+//                System.out.println("No conflicts with k = " + k);
+                return true;
+            }
+            // Neighborhood - possible solutions that can be reached by one-step move
+            List<int[]> neighbourhood = new ArrayList<>();
+            // Vertices used to build the neighborhood
+            List<Integer> neighVertices = new ArrayList<>();
+            // Colors assigned to neighVertices when building the neighborhood
+            List<Integer> neighColors = new ArrayList<>();
+            // Build the neighborhood
+            for (int i = 0; i < spaceSize; i++) {
+                int randomVertex = getRandomInteger(numVert, 0);
+                neighVertices.add(randomVertex);
+                int[] localColoring = coloring.clone();
+                oneStepMove(graph, localColoring, k, randomVertex, neighColors, TabuQueue);
+                neighbourhood.add(localColoring);
+            }
+            // Pick neighborhood with max difference in EvalFun value (with the fewest number of conflicts)
+            int neighID = pickNextNeigh(neighbourhood, graph, currentEval);
+            // Pick next vertex and color
+            int nextVertex = neighVertices.get(neighID);
+            int colorNextVertex = neighColors.get(neighID);
+
+            // Perform the move in the actual solution
+            coloring[nextVertex] = colorNextVertex;
+            // Update current eval value
+            currentEval = evalFun(graph, coloring);
+            // Make the found combination of vertex/color a Move obj
+            Move move = new Move(nextVertex, colorNextVertex);
+            // Add move to the tabu list
+            TabuQueue.add(move);
+            // Update the tabu q
+            while(tabuDuration(currentEval) < TabuQueue.size()){
+                TabuQueue.remove();
+            }
+            iteration++;
+        }
+//        int eeee = evalFun(graph, coloring);
+//        System.out.println("Last Eval, out of while: " + eeee);
+//        System.out.println("No conflicts with k = " + k);
+        return true;
+    }
+
+    public static void TabuCol(GraphMatrix g){
+        int start_k = backTrack(g);
+        System.out.println("NEW BEST UPPER BOUND = " + start_k);
+        while (true){
+            boolean success = TabuCol_kGCP(g,10000,start_k);
+            if(success){
+                System.out.println("NEW BEST UPPER BOUND = " + start_k);
+                start_k = start_k - 1;
+            }
+            else {
                 break;
-
-            HashMap<Integer, Integer> newSolution = new HashMap<>();
-            int node = 0;
-            for (int i = 0; i < reps; i++) {
-                //choose a node to move
-                //if no candidates then return solution //TODO
-                if (moveCandidates.isEmpty()) {
-                    System.out.println("coloring found, no candidates to move :");
-                    return solution;
-                }
-
-                node = moveCandidates.get(getRandomInteger(moveCandidates.size(), 0));
-                //System.out.println("node " + node);
-
-                //choose color but not current
-                int newColor = colors.get(getRandomInteger(colors.size() - 1, 0));
-                if (solution.get(node) == newColor) {
-                    // swap last color and current color for this calc
-                    newColor = colors.get(colors.size() - 1);
-                    //System.out.println("1");
-                }
-                // a node to check later in tabu
-                int[] nodeToCheck = {node, newColor};
-                //System.out.println("Node_To_Check " + Arrays.toString(nodeToCheck));
-
-                //create a neigh solution
-                newSolution.putAll(solution);
-                newSolution.replace(node, newColor);
-
-                //adj pairs with the same color in newSolution
-                int newConflicts = 0;
-
-                for (int j = 0; j < graphLen; j++) {
-                    for (int k = j + 1; k < graphLen; k++) {
-                        if (graph.hasEdge(j, k) && newSolution.get(j).equals(newSolution.get(k))) {
-                            newConflicts = newConflicts + 1;
-                            //System.out.println("2");
-                        }
-                    }
-                }
-//                System.out.println("NEW conf " + newConflicts);
-//                System.out.println("OLD conf " + conflictCount);
-                //TODO Something wrong with heuristic
-                //found an improved solution?
-                if (newConflicts < conflictCount) {
-                    //System.out.println("3");
-                    aspirationLevel.computeIfAbsent(conflictCount, c -> c - 1);
-
-                    if (newConflicts <= aspirationLevel.get(conflictCount)) {
-                        //System.out.println("5");
-                        aspirationLevel.replace(conflictCount, newConflicts - 1);
-//                        System.out.println("conflictCount " + conflictCount);
-//                        System.out.println("newConglicts " + newConflicts + " aspirationLevel.get(conflictCount) " + aspirationLevel.get(conflictCount));
-                        if (tabu.contains(nodeToCheck)) {
-                            //System.out.println("6");
-                            tabu.remove(nodeToCheck);
-                        }
-                    } else if (tabu.contains(nodeToCheck)) {            //tabu move is not good
-                        continue;
-                    }
-                }
-                //System.out.println("new conflicts " + newConflicts);
             }
-            //print the tabu
-//            for(int[] s : tabu) {
-//                System.out.println("tabu " + Arrays.toString(s));
-//            }
-//            System.out.println("-----------------------------------------");
-
-
-            // found a better solution or ran out of reps using the last solution generated
-
-            //current node/color becomes tabu
-            //TODO should probably be nodeToCheck
-            int[] currentNode = {node, solution.get(node)};
-            tabu.add(currentNode);
-
-            if (tabu.size() > tabuSize) {
-                tabu.remove();
-            }
-            // next iteration with new solution
-            solution.putAll(newSolution);
-            iterations = iterations + 1;
-
-//            if (iterations % 100 == 0) {
-//                System.out.println("iterations " + iterations);
-//            }
-        }
-
-        // conflictCount = 0 and solution found or iterations > maxIterations and no solution
-        System.out.println("conflict count " + conflictCount);
-        if (conflictCount != 0) {
-            System.out.println("no coloring found");
-            return null;
-        } else {
-            System.out.println("coloring found");
-            return solution;
         }
     }
 
+    //////////////// helper methods //////////////////
 
-    //////////////////////// helper methods /////////////////////
+    // Check eval fun value for a specific move if better or not then current eval
+    public static boolean checkIfBetter(GraphMatrix g, int[] coloring, int vertex, int color, int currentEval){
+        int[] coloringToCheck = coloring.clone();
+        coloringToCheck[vertex] = color;
+        int evalOfColoringToCheck = evalFun(g,coloringToCheck);
+        return evalOfColoringToCheck < currentEval;
+    }
+
+    // Print the tabu list
+    public static void printTabu(Queue<Move> TabuQueue){
+        for (Move m : TabuQueue) {
+            System.out.println("Vertex: " + m.vertex + ", Color: " + m.color);
+        }
+    }
+
+    // returns time duration to be spent in the tabu list for a given move
+    public static long tabuDuration(int eval){
+        int l = getRandomInteger(9,0);
+
+//        System.out.println("eval: " + eval);
+//        System.out.println("l: " + l);
+
+        double lambda = 0.6;   // 0.38
+//        System.out.println("tabuDuration: " + (long) (eval*lambda+l));
+        return (long) (eval*lambda+l);
+    }
+
+    // Evaluation function. Measures the number of conflicts in a solution (complete solution)
+    public static int evalFun(GraphMatrix g, int[] coloring){
+        int conflicts = 0;
+        int graphLen = g.getNumVert();
+        for (int i = 0; i < graphLen; i++) {
+            for (int j = i + 1; j < graphLen; j++) {
+                if (g.hasEdge(i, j) && coloring[i] == coloring[j]) {
+                    conflicts = conflicts + 1;
+                }
+            }
+        }
+        return conflicts;
+    }
+
+    // One-step move - changing the color of vertex v to color c
+    public static void oneStepMove(GraphMatrix graph, int[] coloring, int k, int vertex, List<Integer> neighColors, Queue<Move> TabuQueue){
+
+        boolean notFoundYet = true;
+
+        while(notFoundYet) {
+            int color = pickBestColor(vertex, graph, coloring, k);
+//            int color = getRandomInteger(k-1,0);
+            Move move = new Move(vertex, color);
+            if(!TabuQueue.contains(move)){
+                neighColors.add(color);
+                coloring[vertex] = color;
+                notFoundYet = false;
+            }
+        }
+    }
+
+    public static int pickNextNeigh(List<int[]> neighborhood, GraphMatrix g, int currentEval){
+        int[] neighEval = new int[neighborhood.size()];
+        for (int i = 0; i < neighborhood.size(); i++) {
+            int[] candidateColoring = neighborhood.get(i);
+            int candidateColoringConflicts = evalFun(g,candidateColoring);
+            neighEval[i] = currentEval - candidateColoringConflicts;
+        }
+        int indexOfBestNeigh = argmax(neighEval);
+        return indexOfBestNeigh;
+    }
+
+    // Pick the best color for the given vertex using the least constraining value heuristic
+    private static int pickBestColor(int vertex, GraphMatrix graph, int[] coloring, int k) {
+        int[] colorCount = new int[k];
+
+        int numVert = graph.getNumVert();
+        // Count the number of times each color is used among the neighbors of the vertex
+        for (int i = 0; i < numVert; i++) {
+            if (graph.hasEdge(vertex, i) && coloring[i] != -1) {
+                colorCount[coloring[i]]++;
+            }
+        }
+        // Pick the color that is used the least among the neighbors
+        int minCount = Integer.MAX_VALUE;
+        int color = -1;
+        for (int i = 0; i < k; i++) {
+            if (colorCount[i] < minCount) {
+                minCount = colorCount[i];
+                color = i;
+            }
+        }
+        return color;
+    }
+
+    // Function that checks if the current coloring of the graph is legal or not (complete solution)
+    public static boolean isLegal(GraphMatrix g, int[] color) {
+        int vertNum = g.getNumVert();
+        for (int i = 0; i < vertNum; i++) {
+            for (int j = i + 1; j < vertNum; j++) {
+                if (g.hasEdge(i, j) && color[j] == color[i])
+                    return false;
+            }
+        }
+        return true;
+    }
     public static int getRandomInteger(int maximum, int minimum){
-            return ((int) (Math.random()*(maximum - minimum))) + minimum;
+        return ((int) (Math.random()*(maximum - minimum))) + minimum;
+    }
+
+    // argmin
+    public static int argmin(int[] a) {
+        int v = Integer.MAX_VALUE;
+        int ind = -1;
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] < v) {
+                v = a[i];
+                ind = i;
+            }
+        }
+        return ind;
+    }
+
+    // argmax
+    public static int argmax(int[] a) {
+        int re = Integer.MIN_VALUE;
+        int arg = -1;
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] > re) {
+                re = a[i];
+                arg = i;
+            }
+        }
+        return arg;
+    }
+
+    // Move class
+    static class Move {
+        int vertex;
+        int color;
+
+        public Move(int vertex, int color) {
+            this.vertex = vertex;
+            this.color = color;
+        }
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph20_2022.txt";
+        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/Tournament_TestSuite/phase3_2022_graph11.txt";
         GraphMatrix g = createGraphFromTxt_Matrix(path);
+//          GraphMatrix g = createGraphFromTxt_DIMACS(path);
 
-//        GraphMatrix g = new GraphMatrix(5);
-//        g.addEdge(0, 1);
-//        g.addEdge(0, 2);
-//        g.addEdge(1, 2);
-//        g.addEdge(1, 3);
-//        g.addEdge(2, 3);
-//        g.addEdge(3, 4);
-//
-        System.out.println(tabuCol(g, 10));
+        System.out.println(TabuCol_kGCP(g, 100000, 11));
+//        System.out.println(TabuCol(g));
     }
 }

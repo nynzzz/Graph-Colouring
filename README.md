@@ -5,8 +5,8 @@
   - `Backtrack` (a back track algorithm for approximating chromatic number in a graph coloring problem).
   - `Greedy` (a greedy algorithm for approximating chromatic number in a graph coloring problem).
   - `BruteForce` (an exact algorithm to find chromatic number of a graph)
-#### BIG_TEST:
-  - `Main_test` (a class for testing lower/upper-bound approximation and running greedy algorithm on given graphs).
+  - `TabuCol` (metaheuristic algorithm based on Tabu Search which is a local search. TabuCol is an upper-bound approximation on chromatic number of a graph)
+  - `BronKerbosch` (lower-bound approximation based on the size of the largest maximal clique)
 #### Graph_Implementation:
   - `GraphList` (Adjacency list representation of a graph).
   - `GraphMatrix` (Adjacency matrix representation of a graph).
@@ -14,16 +14,20 @@
 #### Lower_Upper_bound_approx:
   - `Lower_bound` (class containing our lower-bound approximation algorithms).
   - `Upper_bound` (class containing our upper-bound approximation algorithms).
+#### Special_Checks:
+- `CheckEmptyVertices` (method to check whether a graph contains disconnected vertices)
+- `FullyConnected` (method to check whether a graph is complete)
+- `isBibartite` (method to check whether a graph is bipartite)
+#### Tournament_TestSuite:
+- list of given graphs (3rd phase)
 #### txtReader_DIMACS:
-  - list of some DIMACS graphs 
+  - list of some DIMACS format graphs with known chromatic number
   - `txtReader_DIMACS` (a class containing a method that reads a txt in DIMACS format and returns a graph).
-#### txtReader_ForGivvenGraphs:
-  - list of given graphs 
+#### txtReader_ForGivenGraphs:
+  - list of given graphs (1st phase)
   - `txtReader` (a class containing a method that reads a txt of given format and returns a graph).
 #### Remarks:
-  In order to check the performance of greedy and lower/upper-bound approximation, user needs to open Main_test class and run the section of choosen graph. 
-  In order if user wants to run back-track/tabuCol, he/she is supposed to open Backtrack/TabuCol class and change the path variable in main method to the actual 
-  path of the txt containing the graph. 
+  In order to use the code and check the results a user can run the main method in `Tournament_JAR` class. Format of a txt containing the graph is important, has to be the same as in the provided graphs. This code returns the best lower and apper bound found so far. 
 
 ## Game
 #### Vertex class

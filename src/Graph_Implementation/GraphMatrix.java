@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class GraphMatrix {
     private int NumVert;
     private boolean[][] adj;
-
+    private int NumEdg;
     private List<Vertex> vertexGraph;
 
     private int maxColour;
@@ -16,6 +16,12 @@ public class GraphMatrix {
         this.NumVert = NumVert;
         adj = new boolean[NumVert][NumVert];
         vertexGraph = new ArrayList<Vertex>();
+    }
+    public int getNumEdg(){
+        return this.NumEdg;
+    }
+    public void setNumEdg(int numEdg){
+        this.NumEdg = numEdg;
     }
 
     public int getMaxColour(){
