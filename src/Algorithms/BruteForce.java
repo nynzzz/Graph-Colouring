@@ -66,16 +66,16 @@ public class BruteForce {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        GraphMatrix g = new GraphMatrix(5);
-        g.addEdge(0, 1);
-        g.addEdge(0, 2);
-        g.addEdge(1, 2);
-        g.addEdge(1, 3);
-        g.addEdge(2, 3);
-        g.addEdge(3, 4);
+//        GraphMatrix g = new GraphMatrix(5);
+//        g.addEdge(0, 1);
+//        g.addEdge(0, 2);
+//        g.addEdge(1, 2);
+//        g.addEdge(1, 3);
+//        g.addEdge(2, 3);
+//        g.addEdge(3, 4);
 
-//        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/txtReader_ForGivenGraphs/graph07_2022.txt";
-//        GraphMatrix g = createGraphFromTxt_Matrix(path);
+        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/Tournament_TestSuite/phase3_2022_graph01.txt";
+        GraphMatrix g = createGraphFromTxt_Matrix(path);
 
         System.out.println(bruteForce(g));
     }

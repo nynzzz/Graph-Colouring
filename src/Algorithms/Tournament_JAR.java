@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static Algorithms.BronKerboschWithPivot.bronKerboschWithPivot;
-import static Algorithms.BronKerboschWithoutPivot.bronKerboschWithoutPivot;
 import static Special_Checks.FullyConnected.isFullyConnected;
 import static Special_Checks.isBipartite.isBipartite;
 import static txtReader_ForGivenGraphs.txtReader.createGraphFromTxt_Matrix;
@@ -15,7 +14,7 @@ import static Algorithms.TabuCol.TabuCol;
 
 public class Tournament_JAR {
     public static void main(String[] args) throws FileNotFoundException {
-        String path = "/Users/mymac/Desktop/Graph_Coloring_1.1/Graph_Coloring_1.1/src/Tournament_TestSuite/phase3_2022_graph12.txt";
+        String path = "src/Tournament_TestSuite/phase3_2022_graph01.txt";
         GraphMatrix g = createGraphFromTxt_Matrix(path);
         // Check for Complete graph
         boolean complete = isFullyConnected(g);
