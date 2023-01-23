@@ -28,7 +28,7 @@
   - `txtReader` (a class containing a method that reads a txt of given format and returns a graph).
 #### Remarks:
   In order to use the code and check the results a user can run the main method in `Tournament_JAR` class. Format of a txt containing the graph is important, has to be the same as in the provided graphs. This code returns the best lower and apper bound found so far.
-To run the JAR configuration, a user has to change the path to the JAR file to the actual path on their PC.
+To run the JAR configuration, a user has to change the path to the JAR file to the actual path on their PC. A user has also make sure that he/she changes the path of the graph.txt to the actual path on his/her pc in the main method and rebuild the JAR.
 
 ## Game
 #### Vertex class

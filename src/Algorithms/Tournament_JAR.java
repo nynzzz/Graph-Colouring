@@ -3,6 +3,8 @@ package Algorithms;
 import Graph_Implementation.GraphMatrix;
 
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +16,7 @@ import static Algorithms.TabuCol.TabuCol;
 
 public class Tournament_JAR {
     public static void main(String[] args) throws FileNotFoundException {
-        String path = "src/Tournament_TestSuite/phase3_2022_graph01.txt";
+        String path = "src/Tournament_TestSuite/phase3_2022_graph15.txt";
         GraphMatrix g = createGraphFromTxt_Matrix(path);
         // Check for Complete graph
         boolean complete = isFullyConnected(g);
